@@ -1,0 +1,31 @@
+var scheme   = "<%= ENV['RACK_ENV'] == 'production' ? 'wss://' : 'ws://' %>";
+var uri      = scheme + window.document.location.host + "/ws";
+var ws       = new WebSocket(uri);
+ws.onmessage = function(message) {
+  var data = JSON.parse(message.data);
+  $("#chat-text").append("<div class='panel panel-default'><div class='panel-heading'>" + data.handle + "</div><div class='panel-body'>" + data.text + "</div></div>");
+  $("#chat-text").stop().animate({
+    scrollTop: $('#chat-text')[0].scrollHeight
+  }, 800);
+};
+
+$("#send_chat_message").on("click", function(event) {
+  alert(12);
+  // event.preventDefault();
+  // var handle = $("#input-handle")[0].value;
+  // var text   = $("#input-text")[0].value;
+  // ws.send(JSON.stringify({ handle: handle, text: text }));
+  // $("#input-text")[0].value = "";
+});
+
+$(function(){
+	alert(1);
+	$("#input-form").on("submit", function(event) {
+		alert(2);
+	  var handle = $("#input-handle")[0].value;
+	  var text   = $("#input-text")[0].value;
+	  ws.send(JSON.stringify({ handle: handle, text: text }));
+	  $("#input-text")[0].value = "";
+	});
+	// alert("loaded");
+});
